@@ -75,8 +75,8 @@
     <LibraryPath>C:\Users\ADMIN\Desktop\Computacion Grafica\TutorialOpenGL\Libraries\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\ADMIN\Desktop\Computacion Grafica\TutorialOpenGL\Libraries\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\ADMIN\Desktop\Computacion Grafica\TutorialOpenGL\Libraries\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Estudiante\source\repos\TutorialOpenGL\Libraries\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Estudiante\source\repos\TutorialOpenGL\Libraries\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
