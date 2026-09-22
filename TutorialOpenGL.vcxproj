@@ -172,6 +172,7 @@
   <ItemGroup>
     <ClCompile Include="glad.c" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="stb.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
