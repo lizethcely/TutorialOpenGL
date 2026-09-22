@@ -73,10 +73,24 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>C:\Users\ADMIN\Desktop\Computacion Grafica\TutorialOpenGL\Libraries\Include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\ADMIN\Desktop\Computacion Grafica\TutorialOpenGL\Libraries\Lib;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>C:\Users\ADMIN\source\repos\TutorialOpenGL\Libraries\Include;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryWPath>C:\Users\ADMIN\source\repos\TutorialOpenGL\Libraries\Lib;$(LibraryWPath)</LibraryWPath>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\Users\Estudiante\source\repos\TutorialOpenGL\Libraries\Include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Estudiante\source\repos\TutorialOpenGL\Libraries\Lib;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>C:\Users\ADMIN\source\repos\TutorialOpenGL\Libraries\Include;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryWPath>C:\Users\ADMIN\source\repos\TutorialOpenGL\Libraries\Lib;$(LibraryWPath)</LibraryWPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ExternalIncludePath>C:\Users\ADMIN\source\repos\TutorialOpenGL\Libraries\Include;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryWPath>C:\Users\ADMIN\source\repos\TutorialOpenGL\Libraries\Lib;$(LibraryWPath)</LibraryWPath>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ExternalIncludePath>C:\Users\ADMIN\source\repos\TutorialOpenGL\Libraries\Include;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryWPath>C:\Users\ADMIN\source\repos\TutorialOpenGL\Libraries\Lib;$(LibraryWPath)</LibraryWPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -85,7 +99,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\ADMIN\Desktop\Computacion Grafica\TutorialOpenGL\Libraries\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\ADMIN\source\repos\TutorialOpenGL\Libraries\Lib</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -105,10 +119,12 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\ADMIN\source\repos\TutorialOpenGL\Libraries\Lib</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>
@@ -121,12 +137,13 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\ADMIN\Desktop\Computacion Grafica\TutorialOpenGL\Libraries\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\ADMIN\source\repos\TutorialOpenGL\Libraries\Lib</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\ADMIN\source\repos\TutorialOpenGL\Libraries\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>
@@ -141,10 +158,12 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\ADMIN\source\repos\TutorialOpenGL\Libraries\Lib</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>
