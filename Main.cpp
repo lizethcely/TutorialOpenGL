@@ -1,27 +1,30 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "Libraries/Include/stb/stb_image.h"
 #include<glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-// Código fuente del vertex shader
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
+"layout (location = 1) in vec2 aTexCoord;\n"
+"out vec2 TexCoord;\n"
 "uniform mat4 uMVP;\n"
 "void main()\n"
 "{\n"
-"   gl_Position =  uMVP * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"   gl_Position = uMVP * vec4(aPos, 1.0);\n"
+"   TexCoord = aTexCoord;\n"
 "}\0";
 
-// Código fuente del fragment shader
 const char* fragmentShaderSource = "#version 330 core\n"
 "out vec4 FragColor;\n"
+"in vec2 TexCoord;\n"
+"uniform sampler2D ourTexture;\n"
 "void main()\n"
 "{\n"
-"   FragColor = vec4(0.8f, 0.3f, 0.02f, 1.0f);\n"
+"   FragColor = texture(ourTexture, TexCoord);\n"
 "}\n\0";
-
 
 int main()
 {
@@ -37,12 +40,21 @@ int main()
 	//Decirle a GLFW que queremos usar el perfil core (usar funciones modernas)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	//Crear una ventana de 800x600 y ponerle un título
+	// Vértices del triángulo: [Posición X, Y, Z] + [Coordenadas Textura U, V]
 	GLfloat vertices[] = {
-		-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,  //Esquina inferior izq
-		 0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, //Esquina inferior der
-		 0.0f,  0.5f * float(sqrt(3)) * 2 / 3, 0.0f //Esquina superior
+		// Posiciones                                                // Coordenadas UV
+		-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,                    0.0f, 0.0f, // Inferior Izquierda
+		 0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,                    1.0f, 0.0f, // Inferior Derecha
+		 0.0f,  0.5f * float(sqrt(3)) * 2 / 3, 0.0f,                0.5f, 1.0f  // Superior Centro
 	};
+
+	//Crear una ventana de 800x600 y ponerle un título
+	//GLfloat vertices[] = {
+	//	-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,  //Esquina inferior izq
+	//	 0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, //Esquina inferior der
+	//	 0.0f,  0.5f * float(sqrt(3)) * 2 / 3, 0.0f //Esquina superior
+	//};
+
 
 	//Crear una ventana de 800x600 pixeles
 	GLFWwindow* window = glfwCreateWindow(800, 800, "Tutorial", NULL, NULL);
@@ -112,10 +124,13 @@ int main()
 	//introduce los vertices en l VBO
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	//configurar los atributos de los vértices
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	//habilitar el atributo de vértices paar que openGL sepa usarlo
+	// Atributo 0: Posición (3 floats: X, Y, Z)
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+
+	// Atributo 1: Coordenadas de textura (2 floats: U, V)
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	//vincular el VBO a 0 para que no se pueda modificar accidentalmente
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -137,6 +152,42 @@ int main()
 	glfwSwapBuffers(window);
 
 
+	// ==========================================
+	// CARGAR Y CREAR LA TEXTURA DE OPENGL
+	// ==========================================
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	// Configurar parámetros de repetición y filtrado
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// Invertir imagen verticalmente para coincidir con el sistema de coordenadas de OpenGL
+	stbi_set_flip_vertically_on_load(true);
+
+	int width, height, nrChannels;
+	// Cambia "container.jpg" por el nombre de tu imagenS
+	unsigned char* data = stbi_load("textura1.jpg", &width, &height, &nrChannels, 0);
+	if (data)
+	{
+		GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+	stbi_image_free(data);
+
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
 	//Loop hasta que el usuario cierre la ventana
 	while (!glfwWindowShouldClose(window))
 	{
@@ -144,6 +195,8 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//le habla a OpenGL que use el shader program que creamos
 		glUseProgram(shaderProgram);
+
+		glBindTexture(GL_TEXTURE_2D, texture);
 		int width = 0, height = 0;
 		glfwGetFramebufferSize(window, &width, &height);
 		float aspect = width > 0 ? (float)width / (float)height : 4.0f / 3.0f;
