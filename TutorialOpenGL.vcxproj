@@ -170,9 +170,16 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="camara.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="stb.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="textura1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="camara.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
