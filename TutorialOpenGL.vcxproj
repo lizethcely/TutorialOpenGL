@@ -180,6 +180,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camara.h" />
+    <ClInclude Include="shaderClass.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="default.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,6 +3,7 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtx/vector_angle.hpp>
 
+// Constructor
 camara::camara(int width, int height, glm::vec3 position)
 {
 	camara::width = width;
@@ -10,6 +11,7 @@ camara::camara(int width, int height, glm::vec3 position)
 	Position = position;
 }
 
+// Configura y envía las matrices al shader
 void camara::Matrix(float FOVdeg, float nearPlane, float farPlane, GLuint& shaderProgram, const char* uniform)
 {
 	// Inicializar matrices
@@ -28,27 +30,33 @@ void camara::Matrix(float FOVdeg, float nearPlane, float farPlane, GLuint& shade
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, uniform), 1, GL_FALSE, glm::value_ptr(camMatrix));
 }
 
+// Manejo de entradas de teclado y ratón
 void camara::Inputs(GLFWwindow* window)
 {
-	// Movimiento WASD
+	// --- MOVIMIENTO CON TECLADO (WASD) ---
+
+	// W: Avanzar
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
 		Position += speed * Orientation;
 	}
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-	{
-		Position += speed * glm::normalize(glm::cross(Orientation, Up));
-	}
+	// S: Retroceder
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 	{
 		Position -= speed * Orientation;
 	}
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	// A: Mover a la Izquierda (Restar el vector derecho)
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 	{
 		Position -= speed * glm::normalize(glm::cross(Orientation, Up));
 	}
+	// D: Mover a la Derecha (Sumar el vector derecho)
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		Position += speed * glm::normalize(glm::cross(Orientation, Up));
+	}
 
-	// Movimiento vertical opcional (Espacio = Arriba, Ctrl = Abajo)
+	// Movimiento vertical (Espacio = Arriba, Ctrl = Abajo)
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
 		Position += speed * Up;
@@ -58,7 +66,7 @@ void camara::Inputs(GLFWwindow* window)
 		Position -= speed * Up;
 	}
 
-	// Aumentar velocidad si presiona Shift
+	// Aumentar velocidad al presionar Shift
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 	{
 		speed = 0.15f;
@@ -68,7 +76,7 @@ void camara::Inputs(GLFWwindow* window)
 		speed = 0.05f;
 	}
 
-	// Manejo de orientación con el Mouse
+	// --- MANEJO DE ORIENTACIÓN CON EL MOUSE (CLIC IZQUIERDO) ---
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 	{
 		// Ocultar el cursor mientras se arrastra con el mouse
@@ -76,7 +84,7 @@ void camara::Inputs(GLFWwindow* window)
 
 		if (firstClick)
 		{
-			glfwSetCursorPos(window, (width / 2), (height / 2));
+			glfwSetCursorPos(window, (width / 2.0), (height / 2.0));
 			firstClick = false;
 		}
 
@@ -84,10 +92,10 @@ void camara::Inputs(GLFWwindow* window)
 		glfwGetCursorPos(window, &mouseX, &mouseY);
 
 		// Normalizar coordenadas del mouse
-		float rotX = sensitivity * (float)(mouseY - (height / 2)) / height;
-		float rotY = sensitivity * (float)(mouseX - (width / 2)) / width;
+		float rotX = sensitivity * (float)(mouseY - (height / 2.0)) / height;
+		float rotY = sensitivity * (float)(mouseX - (width / 2.0)) / width;
 
-		// Prevenir que la cámara gire en vertical 360 grados
+		// Prevenir que la cámara gire en vertical 360 grados (Gimbal Lock)
 		glm::vec3 newOrientation = glm::rotate(Orientation, glm::radians(-rotX), glm::normalize(glm::cross(Orientation, Up)));
 
 		if (abs(glm::angle(newOrientation, Up) - glm::radians(90.0f)) <= glm::radians(85.0f))
@@ -99,7 +107,7 @@ void camara::Inputs(GLFWwindow* window)
 		Orientation = glm::rotate(Orientation, glm::radians(-rotY), Up);
 
 		// Centrar el cursor
-		glfwSetCursorPos(window, (width / 2), (height / 2));
+		glfwSetCursorPos(window, (width / 2.0), (height / 2.0));
 	}
 	else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
 	{
@@ -107,4 +115,4 @@ void camara::Inputs(GLFWwindow* window)
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		firstClick = true;
 	}
-} 
+}
